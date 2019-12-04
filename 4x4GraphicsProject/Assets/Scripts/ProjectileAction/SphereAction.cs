@@ -43,7 +43,8 @@ public class SphereAction : MonoBehaviour
     {
         // COULD NOT FIGURE OUT HOW TO GET TRANSFORM LOCALROTATION CORRECTLY
         // Once arm is approximately vertical, launch the ball tangent to the sling (sling's forward direction)
-        if (Arm.transform.localRotation.x < -0.8)
+        //if (Arm.transform.localRotation.x < -0.8)
+        if (Input.GetKeyUp(KeyCode.W))
         {
             currentState = State.Detached;
             launchDir = Sling.PrimitiveList[0].transform.forward;
