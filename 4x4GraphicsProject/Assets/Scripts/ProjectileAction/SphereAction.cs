@@ -7,9 +7,7 @@ public class SphereAction : MonoBehaviour
     enum State {Attached, Detached};  // States of the sphere
     private State currentState = State.Attached;
 
-    public SceneNode Base;
-    public SceneNode Arm;
-    public SceneNode Sling;
+    public SceneNode sling;
 
     public SceneNode[] hierarchy;
 
@@ -20,7 +18,8 @@ public class SphereAction : MonoBehaviour
 
     void Start()
     {
-        hierarchy = new SceneNode[] {Base, Arm, Sling};  // Used to calculate projectile position while attached to sling
+        currentState = State.Attached;
+        sling = GameObject.Find("SlingNode").GetComponent<SceneNode>();
     }
 
     void Update()
@@ -47,7 +46,7 @@ public class SphereAction : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.W))
         {
             currentState = State.Detached;
-            launchDir = Sling.PrimitiveList[0].transform.forward;
+            launchDir = sling.PrimitiveList[0].transform.forward;
         }
     }
 
@@ -62,7 +61,8 @@ public class SphereAction : MonoBehaviour
         // attatch the projectile back
         if (transform.position.y <= -50f)
         {
-            currentState = State.Attached;
+            //currentState = State.Attached;
+            Destroy(gameObject);
         }
     }
 

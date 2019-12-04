@@ -74,4 +74,10 @@ public class SceneNode : MonoBehaviour {
             Projectile.localPosition = newProjectilePosition;
         }
     }
+
+    public void SetProjectile(Transform projectile)
+    {
+        Projectile = projectile;
+        sphereAction = projectile.GetComponent<SphereAction>();
+    }
 }
