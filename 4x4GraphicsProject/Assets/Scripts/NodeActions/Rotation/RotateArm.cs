@@ -10,6 +10,8 @@ public class RotateArm : MonoBehaviour
     public SceneNode Arm;
     public SceneNode Sling;
 
+    public SphereAction sphereAction; // Used to see if the projectile is attached 
+
     private float end_time = 0;  // Keeps track of when the trebuchet can stop launching or resetting
     private float fire_time = 1f;  // Time spent in "Launching" or "Resetting" state
     float deltaRotation = 180f;  // Degrees per second
@@ -17,7 +19,7 @@ public class RotateArm : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
     void Update()
@@ -45,8 +47,11 @@ public class RotateArm : MonoBehaviour
         // Once the "w" key is pressed, the trebuchet starts launching
         if (Input.GetKeyDown("w"))
         {
-            currentState = State.Launching;
-            end_time = Time.realtimeSinceStartup + fire_time;
+            if (sphereAction != null && sphereAction.GetAttached())
+            {
+                currentState = State.Launching;
+                end_time = Time.realtimeSinceStartup + fire_time;
+            }
         }
     }
 

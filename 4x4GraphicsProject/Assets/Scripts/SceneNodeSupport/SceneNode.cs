@@ -9,10 +9,10 @@ public class SceneNode : MonoBehaviour {
     public Vector3 NodeOrigin = Vector3.zero;
     public List<NodePrimitive> PrimitiveList;
 
-    public Transform AxisFrame = null;
-    private Vector3 axisFramePosition = Vector3.zero;
-    private Vector3 cameraPosition = new Vector3(0f, 4f, 0f);
-    private Vector3 lookAtPosition = new Vector3(0f, 20f, 0f);
+    public Transform Projectile;
+    private SphereAction sphereAction;
+
+    private Vector3 projectilePosition = new Vector3(0f, -11f, -11f);
     private Vector3 initialPosition;
     private Vector3 initialScale;
     private Quaternion initialRotation;
@@ -24,6 +24,8 @@ public class SceneNode : MonoBehaviour {
         initialPosition = transform.localPosition;
         initialScale = transform.localScale;
         initialRotation = transform.localRotation;
+        if (Projectile != null)
+            sphereAction = Projectile.GetComponent<SphereAction>();
         // Debug.Log("PrimitiveList:" + PrimitiveList.Count);
 
     }
@@ -65,11 +67,11 @@ public class SceneNode : MonoBehaviour {
                 p.LoadShaderMatrix(ref mCombinedParentXform);
         }
 
-        // Compute AxisFrame 
-        if (AxisFrame != null)
+        // Checks to see if the scene node has a projectile and whether or not it's attached
+        if (Projectile != null && sphereAction.GetAttached())
         {
-            AxisFrame.localPosition = mCombinedParentXform.MultiplyPoint(axisFramePosition);
-            AxisFrame.localRotation = transform.rotation;
+            Vector3 newProjectilePosition = mCombinedParentXform.MultiplyPoint(projectilePosition);
+            Projectile.localPosition = newProjectilePosition;
         }
     }
 }

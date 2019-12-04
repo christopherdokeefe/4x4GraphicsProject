@@ -39,53 +39,34 @@ public class SphereAction : MonoBehaviour
     }
 
     // Keeps the projectile attached to the end of the sling
-    void attachedAction()
+    private void attachedAction()
     {
-        // WARNING: MY MP4 SOLUTION TO CALCULATE THE ENDPOINT OF THE LAST NODE
-        transform.position = new Vector3(0, 0, 0);
-        transform.localRotation = Quaternion.identity;
-
-        Vector3 nodeScale = new Vector3(1, 1, 1);
-        Quaternion nodeRotation = Quaternion.identity;
-        Vector3 nodeTranslation = new Vector3(0, 0, 0);
-
-        for(int i = 0; i < 3; i++)
-        {
-            Vector3 nodePosition = hierarchy[i].transform.localPosition;
-            Vector3 nodeOrigin = hierarchy[i].NodeOrigin;
-
-            nodeRotation *= hierarchy[i].transform.localRotation;
-            nodeTranslation = hierarchy[i].transform.position;
-            nodeScale = Vector3.Scale(nodeScale, hierarchy[i].transform.localScale);
-
-            transform.position += transform.rotation * Vector3.Scale(nodeOrigin, nodeScale);
-            transform.rotation = nodeRotation;
-        }
-        
-        Vector3 baseScale = Base.transform.localScale;
-        Vector3 armScale = Arm.transform.localScale;
-        
-        transform.position += nodeTranslation;
-        transform.position += -Sling.PrimitiveList[0].transform.up * Sling.PrimitiveList[0].transform.localScale.y * 2;
-
-        transform.position = Vector3.Scale(transform.position, baseScale);
-        transform.position = Vector3.Scale(transform.position, armScale);
-
         // COULD NOT FIGURE OUT HOW TO GET TRANSFORM LOCALROTATION CORRECTLY
         // Once arm is approximately vertical, launch the ball tangent to the sling (sling's forward direction)
-        if (Arm.transform.rotation.x < -0.8)
+        if (Arm.transform.localRotation.x < -0.8)
         {
             currentState = State.Detached;
             launchDir = Sling.PrimitiveList[0].transform.forward;
         }
-        
     }
 
-    void detachedAction()
+    private void detachedAction()
     {
         // Move the ball based on launch speed and direction
         // Direction is constantly changing based on gravity to make it realistic
         transform.position += launchSpeed * launchDir * Time.deltaTime;
         launchDir = ((launchSpeed * launchDir) + (gravity * gravityFactor * Vector3.up)).normalized;
+
+        // if the projectile either hits the platform/player (NOT IMPLEMENTED YET) or reaches a certain y value
+        // attatch the projectile back
+        if (transform.position.y <= -50f)
+        {
+            currentState = State.Attached;
+        }
+    }
+
+    public bool GetAttached()
+    {
+        return currentState == State.Attached;
     }
 }
