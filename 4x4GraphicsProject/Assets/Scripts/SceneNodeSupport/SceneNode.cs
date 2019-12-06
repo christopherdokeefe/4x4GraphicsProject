@@ -10,7 +10,7 @@ public class SceneNode : MonoBehaviour {
     public List<NodePrimitive> PrimitiveList;
 
     public Transform Projectile;
-    private SphereAction sphereAction;
+    private ProjectileAction projectileAction;
 
     private Vector3 projectilePosition = new Vector3(0f, -11f, -11f);
     private Vector3 initialPosition;
@@ -25,7 +25,7 @@ public class SceneNode : MonoBehaviour {
         initialScale = transform.localScale;
         initialRotation = transform.localRotation;
         if (Projectile != null)
-            sphereAction = Projectile.GetComponent<SphereAction>();
+            projectileAction = Projectile.GetComponent<ProjectileAction>();
         // Debug.Log("PrimitiveList:" + PrimitiveList.Count);
 
     }
@@ -68,7 +68,7 @@ public class SceneNode : MonoBehaviour {
         }
 
         // Checks to see if the scene node has a projectile and whether or not it's attached
-        if (Projectile != null && sphereAction.GetAttached())
+        if (Projectile != null && projectileAction.GetAttached())
         {
             Vector3 newProjectilePosition = mCombinedParentXform.MultiplyPoint(projectilePosition);
             Projectile.localPosition = newProjectilePosition;
@@ -78,6 +78,6 @@ public class SceneNode : MonoBehaviour {
     public void SetProjectile(Transform projectile)
     {
         Projectile = projectile;
-        sphereAction = projectile.GetComponent<SphereAction>();
+        projectileAction = projectile.GetComponent<ProjectileAction>();
     }
 }

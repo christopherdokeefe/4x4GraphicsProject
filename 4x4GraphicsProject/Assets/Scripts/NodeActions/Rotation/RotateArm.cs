@@ -11,10 +11,10 @@ public class RotateArm : MonoBehaviour
     public SceneNode Sling;
 
     public GameObject ProjectilePrefab;
-    public SphereAction sphereAction; // Used to see if the projectile is attached 
+    public ProjectileAction projectileAction; // Used to see if the projectile is attached 
 
-    private float end_time = 0;  // Keeps track of when the trebuchet can stop launching or resetting
-    private float fire_time = 1f;  // Time spent in "Launching" or "Resetting" state
+    float end_time = 0;  // Keeps track of when the trebuchet can stop launching or resetting
+    float fire_time = 1f;  // Time spent in "Launching" or "Resetting" state
     float deltaRotation = 180f;  // Degrees per second
     float slingRotationFactor = 0.9f; // Percent of deltaRotation used for the sling's rotation
 
@@ -48,7 +48,7 @@ public class RotateArm : MonoBehaviour
         // Once the "w" key is pressed, the trebuchet starts launching
         if (Input.GetKeyDown("w"))
         {
-            //if (sphereAction != null && sphereAction.GetAttached())
+            //if (projectileAction != null && projectileAction.GetAttached())
             //{
                 currentState = State.Launching;
                 end_time = Time.realtimeSinceStartup + fire_time;
@@ -84,8 +84,30 @@ public class RotateArm : MonoBehaviour
         else
         {
             currentState = State.Stationary;
-            GameObject projectile = Instantiate(ProjectilePrefab) as GameObject;
-            Sling.SetProjectile(projectile.transform);
+            createProjectile();
         }
+    }
+
+    // Creates the projectile prefab and assigns it to SceneNode's projectile variable
+    void createProjectile()
+    {
+        GameObject projectile = Instantiate(ProjectilePrefab) as GameObject;
+        projectile.transform.parent = GameObject.Find("Projectiles").transform;
+        Sling.SetProjectile(projectile.transform);
+    }
+
+    // Sets the projectile prefab to whatever dropdown option the user selected
+    // and recreates the projectile if the trebuchet is stationary
+    public void SetProjectilePrefab(GameObject prefab)
+    {
+        ProjectilePrefab = prefab;
+        if (currentState == State.Stationary)  // Only replace projectile if it is stationary
+            createProjectile();
+    }
+
+    // Returns currentState in the form of a string
+    public string GetState()
+    {
+        return currentState.ToString();
     }
 }

@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 1011335142864758956}
   - component: {fileID: 1011335142864758957}
   - component: {fileID: 1011335142864758958}
+  - component: {fileID: -3049270973484925833}
   m_Layer: 0
   m_Name: SphereProjectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +106,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd7fefb9a9ee8a640bcad7119a476008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Base: {fileID: 0}
-  Arm: {fileID: 0}
-  Sling: {fileID: 0}
-  hierarchy: []
+  sling: {fileID: 0}
+  PowerSlider: {fileID: 0}
+--- !u!54 &-3049270973484925833
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011335142864758947}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
