@@ -50,8 +50,9 @@ public class ProjectileAction : MonoBehaviour
             currentState = State.Detached;
             launchDir = sling.PrimitiveList[0].transform.forward;
             launchSpeed = PowerSlider.value;
-            rb.AddForce(launchSpeed * 50 * launchDir);
+            rb.AddForce(launchSpeed * 50 * launchDir);  // Moves projectile in the forward direction of the sling with power based on the slider value
             
+            // Adds random spin to the projectiles for cool look and semi-realism
             Vector3 randomSpin = (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f))).normalized;
             Vector3 tempLaunchDir = Vector3.Scale(randomSpin, launchDir);
             rb.AddTorque(tempLaunchDir * 2 * launchSpeed);
@@ -60,13 +61,6 @@ public class ProjectileAction : MonoBehaviour
 
     private void detachedAction()
     {
-        // Move the ball based on launch speed and direction
-        // Direction is constantly changing based on gravity to make it realistic
-        
-        /* transform.position += launchSpeed * launchDir * Time.deltaTime; */
-        // rb.MovePosition(transform.position + (launchSpeed * launchDir * Time.deltaTime));
-        // launchDir = ((launchSpeed * launchDir) + (gravity * gravityFactor * Vector3.up)).normalized;
-
         // if the projectile either hits the platform/player (NOT IMPLEMENTED YET) 
         // or reaches a certain y value, destroy the projectile
         if (transform.position.y <= -50f)
