@@ -14,13 +14,13 @@ public class RotateBase : MonoBehaviour
 
     void Update()
     {
-        // While holding down the "a" key, rotate left
-        if (Input.GetKey("a"))
+        // While holding down the "right" key, rotate left
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             rotateRight();
         }
-        // While holding down the "d" key, rotate left
-        if (Input.GetKey("d"))
+        // While holding down the "left" key, rotate left
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             rotateLeft();
         }
@@ -29,12 +29,12 @@ public class RotateBase : MonoBehaviour
     // Rotate base to the right by negative deltaRotation
     void rotateRight()
     {
-        Base.transform.Rotate(0, -deltaRotation * Time.deltaTime, 0);
+        Base.transform.Rotate(0, deltaRotation * Time.deltaTime, 0);
     }
 
     // Rotate base to the left by deltaRotation
     void rotateLeft()
     {
-        Base.transform.Rotate(0, deltaRotation * Time.deltaTime, 0);
+        Base.transform.Rotate(0, -deltaRotation * Time.deltaTime, 0);
     }
 }

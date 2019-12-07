@@ -41,18 +41,15 @@ public class RotateArm : MonoBehaviour
         }
     }
     
-    // Trebuchet is stationary until "w" is pressed
+    // Trebuchet is stationary until "up" is pressed
     // This sets its state to "Launching" and it starts a launching timer
     void stationaryAction()
     {
-        // Once the "w" key is pressed, the trebuchet starts launching
-        if (Input.GetKeyDown("w"))
+        // Once the "up" key is pressed, the trebuchet starts launching
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            //if (projectileAction != null && projectileAction.GetAttached())
-            //{
-                currentState = State.Launching;
-                end_time = Time.realtimeSinceStartup + fire_time;
-            //}
+            currentState = State.Launching;
+            end_time = Time.realtimeSinceStartup + fire_time;
         }
     }
 

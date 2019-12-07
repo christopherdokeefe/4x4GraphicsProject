@@ -9,6 +9,9 @@ public class ProjectileAction : MonoBehaviour
     private State currentState = State.Attached;
 
     public SceneNode sling;
+    public SceneNode Base;
+
+    public GameObject mainController;
 
     public Slider PowerSlider;
 
@@ -23,6 +26,8 @@ public class ProjectileAction : MonoBehaviour
     {
         currentState = State.Attached;
         sling = GameObject.Find("SlingNode").GetComponent<SceneNode>();
+        Base = GameObject.Find("BaseNode").GetComponent<SceneNode>();
+        mainController = GameObject.Find("Controller");
         PowerSlider = GameObject.Find("PowerSlider").GetComponent<Slider>();
         rb = GetComponent<Rigidbody>();
     }
@@ -45,10 +50,17 @@ public class ProjectileAction : MonoBehaviour
     // Keeps the projectile attached to the end of the sling until "w" is released
     private void attachedAction()
     {
-        if (Input.GetKeyUp(KeyCode.W))
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Base.transform.localEulerAngles.y, transform.localEulerAngles.z);
+        transform.localEulerAngles = new Vector3(sling.transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        if (Input.GetKeyUp(KeyCode.UpArrow))
         {
             currentState = State.Detached;
-            launchDir = sling.PrimitiveList[0].transform.forward;
+            
+            if (mainController.GetComponent<RotateArm>().GetState() == "Launching")
+                launchDir = sling.PrimitiveList[0].transform.forward;
+            else
+                launchDir = -sling.PrimitiveList[0].transform.forward; // Launch projectile backwards if its still attached while arm is resetting
+
             launchSpeed = PowerSlider.value;
             rb.velocity = (launchSpeed * launchDir);
 

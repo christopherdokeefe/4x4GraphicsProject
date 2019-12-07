@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MainController : MonoBehaviour
 {
-    float rbGravityFactor = 4.5f;  // Multiply gravity constant for all rigidbodies by this amount
+    float rbGravityFactor = 8f;  // Multiply gravity constant for all rigidbodies by this amount
 
     void Start()
     {
