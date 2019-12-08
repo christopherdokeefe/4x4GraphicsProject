@@ -5,17 +5,27 @@ using UnityEngine;
 public class PlatformSection : MonoBehaviour
 {
     private bool shrinking;
-    private float shrinkingRate = 0.9995f;
+    private float shrinkingRate = 0.9992f;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
+    private Rigidbody rb;
 
     void Start()
-    { 
+    {
+        rb = transform.GetComponent<Rigidbody>();
+        initialPosition = rb.position;
+        initialRotation = transform.rotation;
         shrinking = false;
     }
 
     void Update()
     {
+        
         if (shrinking)
         {
+            
+            rb.position = initialPosition;
+            transform.rotation = initialRotation;
             Vector3 newScale = transform.localScale;
             newScale *= shrinkingRate;
             transform.localScale = newScale;
@@ -28,12 +38,13 @@ public class PlatformSection : MonoBehaviour
         {
             shrinking = true;
             StartCoroutine(DestroyGameObject());
+            rb.isKinematic = false;
         }
     }
 
     IEnumerator DestroyGameObject()
     {
-        yield return new WaitForSeconds(30);
+        yield return new WaitForSeconds(20);
         Destroy(gameObject);
     }
 }

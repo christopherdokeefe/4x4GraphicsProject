@@ -52,30 +52,11 @@ public class ProjectileAction : MonoBehaviour
     {
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Base.transform.localEulerAngles.y, transform.localEulerAngles.z);
         transform.localEulerAngles = new Vector3(sling.transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z);
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            currentState = State.Detached;
-            
-            if (mainController.GetComponent<RotateArm>().GetState() == "Launching")
-                launchDir = sling.PrimitiveList[0].transform.forward;
-            else
-                launchDir = -sling.PrimitiveList[0].transform.forward; // Launch projectile backwards if its still attached while arm is resetting
-
-            launchSpeed = PowerSlider.value;
-            rb.velocity = (launchSpeed * launchDir);
-
-
-            // Adds random spin to the projectiles for cool look and semi-realism
-            Vector3 randomSpin = (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f))).normalized;
-            Vector3 tempLaunchDir = Vector3.Scale(randomSpin, launchDir);
-            rb.AddTorque(tempLaunchDir * 2 * launchSpeed);
-        }
     }
 
     private void detachedAction()
     {
-        // if the projectile either hits the platform/player (NOT IMPLEMENTED YET) 
-        // or reaches a certain y value, destroy the projectile
+        // destroy projectile when it reaches 
         if (transform.position.y <= -300f)
         {
             Destroy(gameObject);
@@ -85,5 +66,33 @@ public class ProjectileAction : MonoBehaviour
     public bool GetAttached()
     {
         return currentState == State.Attached;
+    }
+
+    public void DetatchObject()
+    {
+        currentState = State.Detached;
+
+        if (mainController.GetComponent<RotateArm>().GetState() == "Launching")
+            launchDir = sling.PrimitiveList[0].transform.forward;
+        else
+            launchDir = -sling.PrimitiveList[0].transform.forward; // Launch projectile backwards if its still attached while arm is resetting
+
+        launchSpeed = PowerSlider.value;
+        rb.velocity = (launchSpeed * launchDir);
+
+
+        // Adds random spin to the projectiles for cool look and semi-realism
+        Vector3 randomSpin = (new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f))).normalized;
+        Vector3 tempLaunchDir = Vector3.Scale(randomSpin, launchDir);
+        rb.AddTorque(tempLaunchDir * 2 * launchSpeed);
+
+        // Start countdown for the projectile to be alive for a certain amount of time
+        StartCoroutine(DestroyAfterTime());
+    }
+
+    IEnumerator DestroyAfterTime()
+    {
+        yield return new WaitForSeconds(60);
+        Destroy(gameObject);
     }
 }

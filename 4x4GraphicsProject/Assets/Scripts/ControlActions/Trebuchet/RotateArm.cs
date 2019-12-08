@@ -20,7 +20,7 @@ public class RotateArm : MonoBehaviour
 
     void Start()
     {
-        
+        projectileAction = Sling.GetProjectile().GetComponent<ProjectileAction>();
     }
 
     void Update()
@@ -45,8 +45,8 @@ public class RotateArm : MonoBehaviour
     // This sets its state to "Launching" and it starts a launching timer
     void stationaryAction()
     {
-        // Once the "up" key is pressed, the trebuchet starts launching
-        if (Input.GetKey(KeyCode.UpArrow))
+        // Once the "W" key is pressed, the trebuchet starts launching
+        if (Input.GetKey(KeyCode.W))
         {
             currentState = State.Launching;
             end_time = Time.realtimeSinceStartup + fire_time;
@@ -61,9 +61,18 @@ public class RotateArm : MonoBehaviour
         {
             Arm.transform.Rotate(-deltaRotation * Time.deltaTime, 0, 0);
             Sling.transform.Rotate(-deltaRotation * slingRotationFactor * Time.deltaTime, 0, 0);
+            // once the W key has been released, the projectile will launch
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                projectileAction.DetatchObject();
+            }
         }
         else
         {
+            // launch the projectile if it hasn't been fired already
+            if (projectileAction.GetAttached())
+                projectileAction.DetatchObject();
+
             currentState = State.Resetting;
             end_time = Time.realtimeSinceStartup + fire_time;
         }
@@ -91,6 +100,7 @@ public class RotateArm : MonoBehaviour
         GameObject projectile = Instantiate(ProjectilePrefab) as GameObject;
         projectile.transform.parent = GameObject.Find("Projectiles").transform;
         Sling.SetProjectile(projectile.transform);
+        projectileAction = projectile.GetComponent<ProjectileAction>();
     }
 
     // Sets the projectile prefab to whatever dropdown option the user selected

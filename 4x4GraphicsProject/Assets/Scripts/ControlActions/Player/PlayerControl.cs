@@ -4,27 +4,38 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    float movespeed = 40f;
-    float deltaRotation = 90f;
+    public float MoveSpeed = 50f;
+    public float JumpPower = 20f;
 
-    float bobSpeed = 3f;
-    float bobSpeedCurrent;
+    private float bobSpeed = 10f;
+    private float bobSpeedCurrent;
 
-    float bobRange = 0.7f;
-    float bobRangeCurrent = 0f;
+    private float bobRange = 0.7f;
+    private float bobRangeCurrent = 0f;
+
+    private Vector3 delta = Vector3.zero;
+    private Vector3 mouseDownPos = Vector3.zero;
+    private float deltaModifier = 0.1f;
+    
+    private bool canJump;
+
+    private Rigidbody rb;
 
     void Start()
-    {
-        bobSpeed += movespeed * 1 / 10;
-        bobSpeedCurrent = movespeed;
+    { 
+        bobSpeed += MoveSpeed * 1 / 10;
+        bobSpeedCurrent = MoveSpeed;
+        rb = transform.GetComponent<Rigidbody>();
+        canJump = true;
     }
 
     void Update()
     {
+        /*
         // Bob up and down to indicate movement
-        if (Input.GetKey("w") || Input.GetKey("s") || Input.GetKey("a") || Input.GetKey("d"))
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(0, bobSpeedCurrent, 0) * Time.deltaTime;
+            rb.position += new Vector3(0, bobSpeedCurrent, 0) * Time.deltaTime;
             bobRangeCurrent += bobSpeedCurrent * Time.deltaTime;
             if (bobRangeCurrent > bobRange)
             {
@@ -34,32 +45,60 @@ public class PlayerControl : MonoBehaviour
             {
                 bobSpeedCurrent = bobSpeed;
             }
+        } */
+
+        // Handles movement
+        if (Input.GetKey(KeyCode.UpArrow))  // Move forward relative to the player
+        {
+            rb.position += MoveSpeed * transform.forward * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.DownArrow))  // Move backward relative to the player
+        {
+            rb.position += MoveSpeed * -transform.forward * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))  // Move left relative to the player
+        {
+            rb.position += MoveSpeed * -transform.right * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.RightArrow))  // Move right relative to the player
+        {
+            rb.position += MoveSpeed * transform.right * Time.deltaTime;
         }
 
-        if (Input.GetKey("w"))  // Move forward relative to the player
+        // Rotation of player that rotates the camera (rotating around the Player)
+        if (Input.GetMouseButtonDown(1))
         {
-            transform.position += movespeed * transform.forward * Time.deltaTime;
+            mouseDownPos = Input.mousePosition;
+            delta = Vector3.zero;
         }
-        if (Input.GetKey("s"))  // Move backward relative to the player
+        if (Input.GetMouseButton(1))
         {
-            transform.position += movespeed * -transform.forward * Time.deltaTime;
-        }
-        if (Input.GetKey("a"))  // Move left relative to the player
-        {
-            transform.position += movespeed * -transform.right * Time.deltaTime;
-        }
-        if (Input.GetKey("d"))  // Move right relative to the player
-        {
-            transform.position += movespeed * transform.right * Time.deltaTime;
+            delta = mouseDownPos - Input.mousePosition;
+            mouseDownPos = Input.mousePosition;
+            ProcessRotation(delta * deltaModifier);
         }
 
-        if (Input.GetKey("q"))  // Rotate left relative to the player
+        // Handles jump
+        if (Input.GetMouseButtonDown(0))
         {
-            transform.Rotate(0, -deltaRotation * Time.deltaTime, 0);
+            if (canJump)
+            {
+                rb.AddForce(new Vector3(0, JumpPower, 0));
+                canJump = false;
+            }
         }
-        if (Input.GetKey("e"))  // Rotate right relative to the player
+    }
+
+    void ProcessRotation(Vector3 delta)
+    {
+        transform.Rotate(0, delta.x, 0);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag.Equals("Platform"))
         {
-            transform.Rotate(0, deltaRotation * Time.deltaTime, 0);
+            canJump = true;
         }
     }
 }

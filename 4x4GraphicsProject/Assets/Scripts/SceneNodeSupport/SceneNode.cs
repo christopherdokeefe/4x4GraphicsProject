@@ -80,4 +80,9 @@ public class SceneNode : MonoBehaviour {
         Projectile = projectile;
         projectileAction = projectile.GetComponent<ProjectileAction>();
     }
+
+    public Transform GetProjectile()
+    {
+        return Projectile;
+    }
 }

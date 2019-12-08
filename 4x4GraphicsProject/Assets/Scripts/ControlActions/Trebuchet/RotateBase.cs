@@ -15,12 +15,12 @@ public class RotateBase : MonoBehaviour
     void Update()
     {
         // While holding down the "right" key, rotate left
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D))
         {
             rotateRight();
         }
         // While holding down the "left" key, rotate left
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A))
         {
             rotateLeft();
         }

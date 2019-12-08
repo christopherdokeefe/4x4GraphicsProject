@@ -21,10 +21,21 @@ public class DropdownBehavior : MonoBehaviour
         Menu.onValueChanged.AddListener(delegate { menuValueChanged(); });
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Debug.Log(Menu.value + " " + Menu.options.Count);
+            if (Menu.options.Count - 1 == Menu.value)
+            {
+                Menu.value = 0;
+            }
+            else
+            {
+                Menu.value++;
+            }
+            menuValueChanged();
+        }
     }
 
     // When the user selects a new dropdown projectile, set RotateArm's prefab

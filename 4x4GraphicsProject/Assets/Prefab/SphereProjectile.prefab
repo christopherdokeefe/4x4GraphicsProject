@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sling: {fileID: 0}
+  Base: {fileID: 0}
+  mainController: {fileID: 0}
   PowerSlider: {fileID: 0}
 --- !u!54 &-3049270973484925833
 Rigidbody:
