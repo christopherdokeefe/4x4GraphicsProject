@@ -13,6 +13,8 @@ public class ProjectileAction : MonoBehaviour
 
     public GameObject mainController;
 
+    private ProjectileCam ProjectileCam;
+
     public Slider PowerSlider;
 
     private Vector3 launchDir;  // Direction of projectile being launched
@@ -29,7 +31,9 @@ public class ProjectileAction : MonoBehaviour
         Base = GameObject.Find("BaseNode").GetComponent<SceneNode>();
         mainController = GameObject.Find("Controller");
         PowerSlider = GameObject.Find("PowerSlider").GetComponent<Slider>();
+        ProjectileCam = GameObject.Find("Projectile Camera").GetComponent<ProjectileCam>();
         rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
     }
 
     void Update()
@@ -52,6 +56,10 @@ public class ProjectileAction : MonoBehaviour
     {
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Base.transform.localEulerAngles.y, transform.localEulerAngles.z);
         transform.localEulerAngles = new Vector3(sling.transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        if (ProjectileCam.Projectile == null)
+        {
+            ProjectileCam.Projectile = gameObject;
+        }
     }
 
     private void detachedAction()
@@ -71,6 +79,7 @@ public class ProjectileAction : MonoBehaviour
     public void DetatchObject()
     {
         currentState = State.Detached;
+        rb.isKinematic = false;
 
         if (mainController.GetComponent<RotateArm>().GetState() == "Launching")
             launchDir = sling.PrimitiveList[0].transform.forward;
@@ -92,7 +101,7 @@ public class ProjectileAction : MonoBehaviour
 
     IEnumerator DestroyAfterTime()
     {
-        yield return new WaitForSeconds(60);
+        yield return new WaitForSeconds(15);
         Destroy(gameObject);
     }
 }

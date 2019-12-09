@@ -9,6 +9,7 @@ public class RotateArm : MonoBehaviour
 
     public SceneNode Arm;
     public SceneNode Sling;
+    public GameObject ProjectileCam;
 
     public GameObject ProjectilePrefab;
     public ProjectileAction projectileAction; // Used to see if the projectile is attached 
@@ -103,6 +104,10 @@ public class RotateArm : MonoBehaviour
         projectileAction = projectile.GetComponent<ProjectileAction>();
         GameObject.Find("Trebuchet Camera").GetComponent<LoadLight>().LightPosition = projectile.GetComponent<PointLight>();
 
+        if (ProjectileCam.GetComponent<ProjectileCam>().Projectile == null)
+        {
+            ProjectileCam.GetComponent<ProjectileCam>().Projectile = projectile;
+        }
     }
 
     // Sets the projectile prefab to whatever dropdown option the user selected

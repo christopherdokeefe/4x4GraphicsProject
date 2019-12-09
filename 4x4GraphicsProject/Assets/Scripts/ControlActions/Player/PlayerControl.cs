@@ -18,6 +18,7 @@ public class PlayerControl : MonoBehaviour
     private float deltaModifier = 0.1f;
 
     private Vector3 initialPosition;
+    private Quaternion initialRotation;
 
     private bool canJump;
 
@@ -31,6 +32,7 @@ public class PlayerControl : MonoBehaviour
         rb = transform.GetComponent<Rigidbody>();
         canJump = true;
         initialPosition = transform.position;
+        initialRotation = transform.localRotation;
         initialConstraints = rb.constraints;
     }
 
@@ -114,8 +116,10 @@ public class PlayerControl : MonoBehaviour
     public void Reset()
     {
         transform.position = initialPosition;
+        transform.localRotation = initialRotation;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         StartCoroutine(SetConstraints());
+        
     }
 
     // sets the rigidbody constraints to the normal after a frame
