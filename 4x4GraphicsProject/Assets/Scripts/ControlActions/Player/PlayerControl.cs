@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour
     private bool canJump;
 
     private Rigidbody rb;
+    private RigidbodyConstraints initialConstraints;
 
     void Start()
     { 
@@ -30,6 +31,7 @@ public class PlayerControl : MonoBehaviour
         rb = transform.GetComponent<Rigidbody>();
         canJump = true;
         initialPosition = transform.position;
+        initialConstraints = rb.constraints;
     }
 
     void Update()
@@ -38,15 +40,18 @@ public class PlayerControl : MonoBehaviour
         // Bob up and down to indicate movement
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
         {
-            rb.position += new Vector3(0, bobSpeedCurrent, 0) * Time.deltaTime;
-            bobRangeCurrent += bobSpeedCurrent * Time.deltaTime;
-            if (bobRangeCurrent > bobRange)
+            if (canJump) // don't bob when in middair
             {
-                bobSpeedCurrent = -bobSpeed;
-            }
-            else if (bobRangeCurrent < -bobRange)
-            {
-                bobSpeedCurrent = bobSpeed;
+                rb.position += new Vector3(0, bobSpeedCurrent, 0) * Time.deltaTime;
+                bobRangeCurrent += bobSpeedCurrent * Time.deltaTime;
+                if (bobRangeCurrent > bobRange)
+                {
+                    bobSpeedCurrent = -bobSpeed;
+                }
+                else if (bobRangeCurrent < -bobRange)
+                {
+                    bobSpeedCurrent = bobSpeed;
+                }
             }
         } 
 
@@ -105,8 +110,18 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    // puts player in initialPosition and locks rigidbody
     public void Reset()
     {
         transform.position = initialPosition;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        StartCoroutine(SetConstraints());
+    }
+
+    // sets the rigidbody constraints to the normal after a frame
+    IEnumerator SetConstraints()
+    {
+        yield return new WaitForEndOfFrame();
+        rb.constraints = initialConstraints;
     }
 }
