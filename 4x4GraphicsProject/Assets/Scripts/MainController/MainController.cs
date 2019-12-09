@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MainController : MonoBehaviour
 {
+    public Text Timer;
+    float time = 60f;
     float rbGravityFactor = 8f;  // Multiply gravity constant for all rigidbodies by this amount
 
     void Start()
@@ -14,6 +16,15 @@ public class MainController : MonoBehaviour
 
     void Update()
     {
-        
+        if (time > 0)
+        {
+            time -= Time.deltaTime;
+            Timer.text = "Time: " + time.ToString("F1");
+        }
+        else
+        {
+            
+        }
+
     }
 }

@@ -101,6 +101,8 @@ public class RotateArm : MonoBehaviour
         projectile.transform.parent = GameObject.Find("Projectiles").transform;
         Sling.SetProjectile(projectile.transform);
         projectileAction = projectile.GetComponent<ProjectileAction>();
+        GameObject.Find("Trebuchet Camera").GetComponent<LoadLight>().LightPosition = projectile.GetComponent<PointLight>();
+
     }
 
     // Sets the projectile prefab to whatever dropdown option the user selected
