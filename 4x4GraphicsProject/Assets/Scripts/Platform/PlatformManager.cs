@@ -16,18 +16,26 @@ public class PlatformManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SpawnPlatformSections();
+    }
+
+    private void SpawnPlatformSections()
+    {
         // make sure the prefab is not null and it has the PlatformSection script
         Debug.Assert(platformSectionPrefab && platformSectionPrefab.GetComponent<PlatformSection>());
 
         // get the size of each section
         sizeOfSection = platformSectionPrefab.transform.localScale.x;
-        int squaresPerSide = (int) (DistanceFromTrebuchet / sizeOfSection * 2);
-        
+        int squaresPerSide = (int)(DistanceFromTrebuchet / sizeOfSection * 2);
+
+        // creates an array of how many gameobjects are needed
         platformSections = new GameObject[(squaresPerSide - 1) * 4];
         Debug.Log(platformSections.Length);
 
+        // four sides to spawn
         for (int i = 0; i < 4; i++)
         {
+            // 
             for (int j = 0; j < squaresPerSide; j++)
             {
                 platformSections[i * j] = Instantiate(platformSectionPrefab, transform) as GameObject;
@@ -49,5 +57,16 @@ public class PlatformManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void Reset()
+    {
+        int numberOfChildren = transform.childCount;
+        for (int i = 0; i < numberOfChildren; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        SpawnPlatformSections();
     }
 }

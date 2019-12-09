@@ -16,7 +16,9 @@ public class PlayerControl : MonoBehaviour
     private Vector3 delta = Vector3.zero;
     private Vector3 mouseDownPos = Vector3.zero;
     private float deltaModifier = 0.1f;
-    
+
+    private Vector3 initialPosition;
+
     private bool canJump;
 
     private Rigidbody rb;
@@ -27,11 +29,12 @@ public class PlayerControl : MonoBehaviour
         bobSpeedCurrent = MoveSpeed;
         rb = transform.GetComponent<Rigidbody>();
         canJump = true;
+        initialPosition = transform.position;
     }
 
     void Update()
     {
-        /*
+        
         // Bob up and down to indicate movement
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
         {
@@ -45,7 +48,7 @@ public class PlayerControl : MonoBehaviour
             {
                 bobSpeedCurrent = bobSpeed;
             }
-        } */
+        } 
 
         // Handles movement
         if (Input.GetKey(KeyCode.UpArrow))  // Move forward relative to the player
@@ -100,5 +103,10 @@ public class PlayerControl : MonoBehaviour
         {
             canJump = true;
         }
+    }
+
+    public void Reset()
+    {
+        transform.position = initialPosition;
     }
 }
