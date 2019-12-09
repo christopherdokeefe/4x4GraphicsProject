@@ -5,12 +5,16 @@ using UnityEngine;
 public class PlatformSection : MonoBehaviour
 {
     private bool shrinking;
-    private float shrinkingRate = 0.999f;
+    private float shrinkingRate = 0.9992f;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
     private Rigidbody rb;
 
     void Start()
     {
         rb = transform.GetComponent<Rigidbody>();
+        initialPosition = rb.position;
+        initialRotation = transform.rotation;
         shrinking = false;
     }
 
@@ -20,6 +24,8 @@ public class PlatformSection : MonoBehaviour
         if (shrinking)
         {
             
+            rb.position = initialPosition;
+            transform.rotation = initialRotation;
             Vector3 newScale = transform.localScale;
             newScale *= shrinkingRate;
             transform.localScale = newScale;
